@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ops Knowledge Search — Client Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F3EF;--surface:#FFFFFF;--surface2:#EEEDE8;
+  --border:#DEDAD2;--border2:#C8C5BC;
+  --text:#181714;--text2:#4A4844;--text3:#8A8880;
+  --teal:#0F6E56;--teal-l:#E1F5EE;--teal-m:#9FE1CB;--teal-d:#085041;
+  --co:#993C1D;--co-l:#FAECE7;--co-m:#F5C4B3;
+  --re:#A32D2D;--re-l:#FCEBEB;
+  --am-l:#FAEEDA;--am-d:#633806;
+  --radius:12px;--rsm:7px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:36px 24px 80px}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:12px;flex-wrap:wrap}
+.hdr-l{display:flex;align-items:center;gap:14px}
+.logo{width:42px;height:42px;border-radius:10px;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-size:21px;flex-shrink:0}
+.title{font-size:21px;font-weight:600;color:var(--text);letter-spacing:-.02em}
+.sub{font-size:12px;color:var(--text3);margin-top:2px}
+.pill{font-size:11px;font-weight:600;padding:5px 13px;border-radius:20px;background:var(--teal-l);color:var(--teal-d);border:0.5px solid var(--teal-m);display:flex;align-items:center;gap:6px}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+@keyframes ping{0%,100%{opacity:1}50%{opacity:.25}}
+.pill-dot.pulsing{animation:ping 1.2s ease-in-out infinite}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sync-btn{font-size:11px;font-weight:600;padding:6px 13px;border-radius:var(--rsm);border:0.5px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s}
+.sync-btn:hover{background:var(--teal-l);color:var(--teal-d);border-color:var(--teal-m)}
+.sync-btn:disabled{opacity:.4;cursor:not-allowed}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 1s linear infinite;display:inline-block}
+.doc-list{display:flex;flex-direction:column;gap:7px}
+.doc-item{background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--rsm);padding:11px 14px;display:flex;align-items:center;gap:11px}
+.doc-icon{width:30px;height:30px;border-radius:6px;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--teal-d);flex-shrink:0}
+.doc-info{flex:1;min-width:0}
+.doc-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-meta{font-size:11px;color:var(--text3);margin-top:2px}
+.ok-badge{font-size:10px;padding:2px 9px;border-radius:20px;background:var(--teal-l);color:var(--teal-d);border:0.5px solid var(--teal-m);white-space:nowrap}
+.err-badge{font-size:10px;padding:2px 9px;border-radius:20px;background:var(--re-l);color:var(--re);border:0.5px solid #F7C1C1;white-space:nowrap}
+.loading-badge{font-size:10px;padding:2px 9px;border-radius:20px;background:var(--am-l);color:var(--am-d);border:0.5px solid #FAC775;white-space:nowrap}
+.empty-state{font-size:12px;color:var(--text3);text-align:center;padding:20px}
+.s-row{display:flex;gap:8px;margin-bottom:13px}
+.s-input{flex:1;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--rsm);padding:11px 14px;background:var(--bg);color:var(--text);outline:none;font-family:'DM Sans',sans-serif;transition:border-color .15s,box-shadow .15s}
+.s-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,110,86,.09)}
+.ask-btn{font-size:13px;font-weight:600;padding:11px 20px;border-radius:var(--rsm);border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:7px;white-space:nowrap;transition:background .15s}
+.ask-btn:hover{background:var(--teal-d)}
+.ask-btn:disabled{opacity:.4;cursor:not-allowed}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:11px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border2);color:var(--text2);cursor:pointer;background:var(--surface);transition:all .15s;font-family:'DM Sans',sans-serif}
+.chip:hover{border-color:var(--teal);color:var(--teal-d);background:var(--teal-l)}
+.thinking{display:none;align-items:center;gap:10px;padding:13px 0;font-size:13px;color:var(--text3)}
+.thinking.show{display:flex}
+.dots span{width:6px;height:6px;border-radius:50%;background:var(--teal);opacity:.3;animation:pulse 1.2s ease-in-out infinite;display:inline-block;margin-right:4px}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.ans-block{background:var(--teal-l);border:0.5px solid var(--teal-m);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px}
+.ans-lbl{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.ans-text{font-size:13px;color:var(--teal-d);line-height:1.8}
+.no-ans-block{background:var(--co-l);border:0.5px solid var(--co-m);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px}
+.no-ans-lbl{font-size:10px;font-weight:700;color:var(--co);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.no-ans-text{font-size:13px;color:#712B13;line-height:1.75}
+.src-used{margin-top:12px}
+.src-lbl{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.src-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 11px;border-radius:20px;border:0.5px solid var(--border2);background:var(--surface);color:var(--text2);margin:0 4px 4px 0}
+.err-bar{background:var(--re-l);border:0.5px solid #F7C1C1;border-radius:var(--rsm);padding:11px 14px;font-size:12px;color:var(--re);display:none;align-items:center;gap:8px;margin-bottom:12px}
+.err-bar.show{display:flex}
+.contacts{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.cchip{font-size:11px;padding:5px 11px;border-radius:20px;border:0.5px solid var(--border2);background:var(--surface);color:var(--text2);display:flex;align-items:center;gap:6px}
+.cav{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0}
+.footer{text-align:center;font-size:11px;color:var(--text3);margin-top:30px;line-height:1.9}
+.footer strong{color:var(--text2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-l">
+      <div class="logo"><i class="ti ti-search"></i></div>
+      <div>
+        <div class="title">Ops Knowledge Search</div>
+        <div class="sub">Client Operations × Account Management</div>
+      </div>
+    </div>
+    <div class="pill"><span class="pill-dot pulsing" id="status-dot"></span><span id="status-txt">Connecting…</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span><i class="ti ti-brand-github" style="font-size:14px;margin-right:4px"></i> Shared knowledge library</span>
+      <button class="sync-btn" id="sync-btn" onclick="loadDocs(true)">
+        <i class="ti ti-refresh" id="sync-icon"></i> Refresh
+      </button>
+    </div>
+    <div class="doc-list" id="doc-list"><div class="empty-state">Connecting to GitHub…</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-sparkles" style="font-size:14px;margin-right:4px"></i> Ask a question</div>
+    <div class="s-row">
+      <input class="s-input" id="q" placeholder="e.g. What is the escalation process?" onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="ask-btn" id="ask-btn" onclick="doSearch()"><i class="ti ti-arrow-right"></i> Ask</button>
+    </div>
+    <div class="chips">
+      <span class="chip" onclick="setQ('How do I submit a new request to Client Ops?')">Submit a request</span>
+      <span class="chip" onclick="setQ('What counts as high urgency?')">Urgency levels</span>
+      <span class="chip" onclick="setQ('What are the escalation steps?')">Escalation</span>
+      <span class="chip" onclick="setQ('Who owns what in the 3MP portal?')">3MP portal</span>
+      <span class="chip" onclick="setQ('What should a kick-off meeting include?')">Kick-off meeting</span>
+      <span class="chip" onclick="setQ('What is the MAO protocol?')">MAO protocol</span>
+    </div>
+    <div class="thinking" id="thinking">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <span id="thinking-txt">Reading your sources…</span>
+    </div>
+  </div>
+
+  <div class="err-bar" id="err-bar"><i class="ti ti-alert-circle" style="font-size:16px"></i><span id="err-msg"></span></div>
+  <div id="results"></div>
+
+  <div class="footer">
+    Troubleshooting? Contact <strong>Jesseca</strong> — Operations Point of Contact<br>
+    <strong>Beth</strong> (Velocity) · <strong>Emily</strong> (Strategy) · <strong>Nichole</strong> (Production) · <strong>Josue</strong> (Automation)
+  </div>
+</div>
+
+<script>
+// ── GitHub config ──────────────────────────────────────────────
+const RAW_BASE = 'https://raw.githubusercontent.com/jessecafrazier-lab/ops-knowledge-search/refs/heads/main/';
+
+const CONTACTS = [
+  {i:'JE',n:'Jesseca',r:'Operations Point of Contact',bg:'#E1F5EE',c:'#085041'},
+  {i:'BE',n:'Beth',r:'Velocity',bg:'#EEEDFE',c:'#3C3489'},
+  {i:'EM',n:'Emily',r:'Strategy',bg:'#FAEEDA',c:'#633806'},
+  {i:'NI',n:'Nichole',r:'Production',bg:'#FAECE7',c:'#712B13'},
+  {i:'JO',n:'Josue',r:'Automation',bg:'#E6F1FB',c:'#0C447C'},
+];
+
+let docs = [];
+
+// Try direct fetch first (works when CORS allows), fall back to proxy
+async function ghFetch(filename) {
+  const direct = RAW_BASE + encodeURIComponent(filename) + '?t=' + Date.now();
+  try {
+    const r = await fetch(direct);
+    if (r.ok) return await r.text();
+    throw new Error('direct failed');
+  } catch {
+    // fallback proxy
+    const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(direct);
+    const r2 = await fetch(proxy);
+    if (!r2.ok) throw new Error('Proxy failed');
+    const d = await r2.json();
+    if (!d.contents) throw new Error('Empty proxy response');
+    return d.contents;
+  }
+}
+
+function setStatus(txt, loading) {
+  document.getElementById('status-txt').textContent = txt;
+  document.getElementById('status-dot').classList.toggle('pulsing', loading);
+}
+
+function renderDocs() {
+  const list = document.getElementById('doc-list');
+  if (!docs.length) { list.innerHTML = '<div class="empty-state">No documents found. Add .txt files to GitHub and list them in index.json.</div>'; return; }
+  list.innerHTML = docs.map(d => `
+    <div class="doc-item">
+      <div class="doc-icon"><i class="ti ti-file-text"></i></div>
+      <div class="doc-info">
+        <div class="doc-name">${d.name}</div>
+        <div class="doc-meta">${d.status==='ok' ? d.content.length.toLocaleString()+' chars loaded' : d.status==='error' ? 'Failed to load — check filename in index.json' : 'Loading…'}</div>
+      </div>
+      <span class="${d.status==='ok'?'ok-badge':d.status==='error'?'err-badge':'loading-badge'}">${d.status==='ok'?'Loaded':d.status==='error'?'Error':'…'}</span>
+    </div>`).join('');
+}
+
+async function loadDocs(manual) {
+  const btn = document.getElementById('sync-btn');
+  const ico = document.getElementById('sync-icon');
+  btn.disabled = true; ico.className = 'ti ti-loader spin';
+  setStatus(manual ? 'Refreshing…' : 'Connecting…', true);
+  hideErr();
+  try {
+    const indexRaw = await ghFetch('index.json');
+    let names;
+    try { names = JSON.parse(indexRaw); } catch { throw new Error('index.json is not valid JSON. Check the file in your repo.'); }
+    if (!Array.isArray(names) || !names.length) throw new Error('index.json is empty — add filenames to the array.');
+    docs = names.map(n => ({ name: n, content: '', status: 'loading' }));
+    renderDocs();
+    await Promise.all(docs.map(async (d, i) => {
+      try {
+        docs[i].content = await ghFetch(d.name);
+        docs[i].status = 'ok';
+      } catch {
+        docs[i].status = 'error';
+        docs[i].content = '[Could not load]';
+      }
+      renderDocs();
+    }));
+    const ok = docs.filter(d => d.status === 'ok').length;
+    setStatus(ok + ' doc' + (ok !== 1 ? 's' : '') + ' · live from GitHub', false);
+  } catch(e) {
+    showErr(e.message || 'Could not connect to GitHub.');
+    setStatus('Connection failed', false);
+    document.getElementById('doc-list').innerHTML = '<div class="empty-state">Could not load. Make sure the repo is public and index.json is saved correctly.</div>';
+  }
+  btn.disabled = false; ico.className = 'ti ti-refresh';
+}
+
+function showErr(m) { document.getElementById('err-msg').textContent = m; document.getElementById('err-bar').classList.add('show'); }
+function hideErr()  { document.getElementById('err-bar').classList.remove('show'); }
+function setThinking(show, msg) { document.getElementById('thinking').classList.toggle('show', show); if (msg) document.getElementById('thinking-txt').textContent = msg; }
+function setQ(q)    { document.getElementById('q').value = q; doSearch(); }
+
+async function doSearch() {
+  const q = document.getElementById('q').value.trim();
+  if (!q) return;
+  hideErr();
+  const ready = docs.filter(d => d.status === 'ok');
+  if (!ready.length) { showErr('No documents loaded. Click Refresh and wait for the library to finish loading.'); return; }
+  const btn = document.getElementById('ask-btn');
+  btn.disabled = true;
+  document.getElementById('results').innerHTML = '';
+  setThinking(true, 'Reading your sources…');
+
+  const LIMIT = 20000; let total = 0;
+  const blocks = ready.map((d, i) => {
+    const avail = Math.max(0, LIMIT - total);
+    const chunk = d.content.slice(0, Math.min(avail, 7000));
+    total += chunk.length;
+    return `--- SOURCE ${i+1}: "${d.name}" ---\n${chunk}${d.content.length > chunk.length ? '\n[...truncated]' : ''}`;
+  }).join('\n\n');
+
+  const system = `You are an internal knowledge assistant for Client Operations. Answer ONLY from the sources below. Never use outside knowledge.
+
+RULES:
+1. Answer only from the provided sources. If not covered, say: "This isn't covered in the current resources."
+2. Cite which source(s) you drew from by name.
+3. If you cannot answer, direct the user to: Jesseca (Operations Point of Contact), Beth (Velocity), Emily (Strategy), Nichole (Production), or Josue (Automation).
+4. Be direct. 2–6 sentences max. Use line breaks between steps if listing a process.
+5. Never invent steps, names, or processes not in the sources.
+
+SOURCES:
+${blocks}`;
+
+  setThinking(true, 'Generating answer…');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1024, system, messages: [{ role: 'user', content: q }] })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const answer = (data.content?.find(b => b.type === 'text')?.text || '').trim();
+    const notFound = answer.toLowerCase().includes("isn't covered") || answer.toLowerCase().includes("not covered");
+    const used = ready.filter(d => answer.includes(d.name));
+    let html = '';
+    if (notFound) {
+      html = `<div class="no-ans-block">
+        <div class="no-ans-lbl"><i class="ti ti-alert-circle"></i> Not found in your sources</div>
+        <div class="no-ans-text">${answer.replace(/\n/g,'<br>')}</div>
+        <div style="font-size:11px;font-weight:600;color:#712B13;margin-top:11px;margin-bottom:7px">Contact a team member directly:</div>
+        <div class="contacts">${CONTACTS.map(c=>`<div class="cchip"><div class="cav" style="background:${c.bg};color:${c.c}">${c.i}</div>${c.n} <span style="color:#8A8880">· ${c.r}</span></div>`).join('')}</div>
+      </div>`;
+    } else {
+      html = `<div class="ans-block">
+        <div class="ans-lbl"><i class="ti ti-sparkles"></i> Answer from your sources</div>
+        <div class="ans-text">${answer.replace(/\n/g,'<br>')}</div>
+      </div>`;
+      if (used.length) {
+        html += `<div class="src-used"><div class="src-lbl">Sources cited</div>${used.map(d=>`<span class="src-pill"><i class="ti ti-file-text" style="font-size:12px;color:#085041"></i>${d.name}</span>`).join('')}</div>`;
+      }
+    }
+    document.getElementById('results').innerHTML = html;
+  } catch(e) {
+    showErr('Could not generate answer: ' + (e.message || 'Connection issue. Try again.'));
+  }
+  setThinking(false);
+  btn.disabled = false;
+}
+
+loadDocs(false);
+</script>
+</body>
+</html>
