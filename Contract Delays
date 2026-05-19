@@ -1,0 +1,253 @@
+Lotting Delays
+QA Delays
+Processing/Installment Delays
+Communicating Delays
+Delay Reasons / Key
+Lotting Delays
+Delayed - Inventory Unavailable
+
+Definition:
+
+This status is used when a lot cannot be created due to a lack of sufficient or appropriate inventory. This may be because the inventory is not present in the lotting system or because the available items do not meet the established lotting guidelines (i.e. deep SKU).
+
+Example:
+
+A lot was scheduled to be created on Monday, but the inventory in the system only included six small accessories, which is not enough to meet the category requirement. As a result, the lot is marked "Delayed - Inventory Unavailable" until more suitable inventory is available.
+
+
+Lotting Delay - Above Retail Range
+
+Definition: 
+This status would be used when there is enough inventory available to create a contract lot, but the resulting lot would be above the listed retail range 
+
+Example:
+A Furniture lot was scheduled to be created on Tuesday, but when compiling the lot, the retail value lands at $50,000. The retail per TL range for this lot is $20,000-$40,000. As a result, this lot is marked “Delayed - Above Retail Range” until more suitable inventory is available, allowing us to lot within the listed retail range. 
+
+
+Lotting Delay - Below Retail Range
+
+Definition: 
+This status would be used when there is enough inventory available to create a contract lot, but the resulting lot would be below the listed retail range 
+
+Example:
+A Furniture lot was scheduled to be created on Tuesday, but when compiling the lot, the retail value lands at $10,000. The retail per TL range for this lot is $20,000-$40,000. As a result, this lot is marked “Delayed - Below Retail Range” until more suitable inventory is available, allowing us to lot within the listed retail range. 
+
+ 
+
+Lotting Delay - Lotting Process Error
+
+Definition:
+This status applies to lots that have not passed the Quality Assurance (QA) process due to issues in how the lot was built. These errors must be resolved and cleared by QA before the lot can proceed. If the lot is reworked entirely (relotted), the status remains unresolved until the new lot clears QA.
+
+Example:
+A lot was flagged by QA for missing product descriptions and incorrect categorization. Since these errors prevent approval, it is marked as "Delayed - Lotting Error" and remains in that status until QA gives the green light.
+
+Lotting Delay - Recalls/Other Issues
+
+Definition:
+This status applies to lots that have passed the Quality Assurance (QA) process, but have to be re-worked/rebuilt due to recalled or other inventory-specific issues. These pallets must be disabled and deleted, and the lot remade to pass the QA process again
+
+Example:
+A Mixed lot was created and passed through the QA process before being informed that three of the pallets in this lot contain recalled items. Since this lot contains recalled items, those items must be disabled and deleted, and the rest of the inventory sent back to Sunrise for the Mixed lot to be remade without recalled inventory included
+
+QA Delays
+QA Delay - Delayed Feedback/Response
+
+Definition: 
+
+QA feedback was submitted late in the day or response from the lotter was not received same day. 
+
+Example: 
+
+A lot is created on Tuesday for an installment scheduled for Tuesday, but is reviewed by QA and feedback from the lotter isn’t received/resolved until Wednesday.
+
+QA Delay - Deep SKU
+
+Definition: 
+
+Inventory flagged by QA as having a large quantity of a single product/item number. 
+
+Example: 
+
+1 pallet containing 200 units of a plush toy and 20 units of board games. 
+
+QA Delay - Incorrect Pallet Count
+
+Definition: 
+
+Lots flagged by QA as having pallet counts that exceed or do not meet the pallet count requirement. 
+
+Example:
+
+A Target furniture lot containing more less than the required 22 pallets or an Amazon mixed lot containing more than the required 24 pallets. 
+
+QA Delay - Incorrect Breakdown/Distribution
+
+Definition:
+
+ Lots flagged by QA for having incorrect category composition or not meeting lotting guidelines stated in Salesforce. 
+
+Example: 
+
+Salesforce lotting guidelines state to include only 1 pallet of Seasonal Inventory but the lot contains 3. 
+
+Salesforce lotting guidelines state to exclude pallets heavy in apparel and apparel makes up over 5% of the over retail. 
+
+QA Delay - Above Retail Range
+
+Definition: 
+
+QA identified a lot as exceeding the 15% maximum threshold variance for total retail range. 
+
+Example: 
+
+Retail range in Salesforce is $100,000 - $150,000 and the total retail for the lot is $172,500 or more. 
+
+QA Delay - Below Retail Range
+
+Definition: 
+
+QA identified a lot as exceeding the 15% minimum threshold variance for total retail range. 
+
+Example: 
+
+Retail range in Salesforce is $100,000 - $150,000 and the total retail for the lot is $85,000 or less. 
+
+QA Delay - Other Issues
+
+Definition: 
+
+Other issues that aren’t explicitly covered by other QA delay options, this will also serve as a placeholder for new or infrequent issues until they become prominent. 
+
+Example: 
+
+Lotting out of the wrong location, etc. 
+
+Processing/Installment Delays
+Delayed - Processing Incomplete: Script Issue
+
+Definition:
+
+This status indicates that a lot has successfully passed QA but is delayed in the listing phase due to script-related technical issues. These delays occur after lotting is complete but before the lot is live on the platform.
+
+Example:
+
+QA approved a lot on Thursday, but a bug in the listing script prevented it from being published. The lot is marked as "Delayed - Processing Incomplete" until the technical issue is resolved and the listing can proceed.
+
+Delayed - Processing Incomplete: Platform Issue
+
+Definition:
+
+This status indicates that the lot has successfully passed through QA but is delayed in the listing phase due to a technical issue related to the platform (3MP or Magento).
+
+Examples:
+
+QA approved a lot on Monday, but Magento is down and the platform cannot be accessed for processing. 
+
+QA approved a test lot on Monday, but the 3MP platform will not accept what should be a valid manifest for invoice creation.
+
+Delayed - Processing Incomplete: Listing Delay
+
+Definition:
+
+This status indicates that the lot has successfully passed through QA but is delayed in the listing phase due to the lister being unable to complete processing for the day.
+
+Examples:
+
+QA approved a lot on Monday, but it was too late in the day for the lister to process.
+
+QA approved a test lot on Monday, but the lister was unable to complete the assignment.
+
+Communicating Delays
+It is the responsibility of the individual(s) who identify a delay to update the schedule accordingly. For example: lotting delays should be updated by the Lotting team, QA delays by the QA team, and processing delays by the Lister. Once a delay is identified, follow the steps below to ensure it is documented accurately:
+
+Update the schedule of the marketplace with the delay to include delay reasoning in the appropriate column. 
+
+image-20250812-135722.png
+Contract Schedule Delay Reason Column
+Highlight the appropriate Lot ID/SKU in red to identify it as delayed.
+
+image-20250812-140213.png
+Delayed Contract Installment
+Once delays have been resolved and an order has been created, it is the responsibility of the lister to mark the schedule as created, update the resolved column and remove highlights from the Lot ID. 
+
+ 
+
+Delay Reasons / Key
+Delay Reason
+
+Key
+
+LD - Inventory Unavailable
+
+LD = Lotting Delay
+
+LD - Above Retail Range
+
+QAD = QA Delay
+
+LD - Below Retail Range
+
+PD = Processing Delay
+
+LD - Lotting Process Error
+
+ 
+
+LD - Recalls/Other Issues
+
+ 
+
+QAD - Delayed Feedback/Response
+
+ 
+
+QAD - Deep SKU
+
+ 
+
+QAD - Incorrect Pallet Count
+
+ 
+
+QAD - Incorrect Breakdown/Distribution
+
+ 
+
+QAD - Above Retail Range
+
+ 
+
+QAD - Below Retail Range
+
+ 
+
+QAD - Other Issues
+
+ 
+
+PD - Processing Incomplete: Script Issue
+
+ 
+
+PD - Processing Incomplete: Platform Issue
+
+ 
+
+PD - Processing Incomplete: Listing Delay
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
